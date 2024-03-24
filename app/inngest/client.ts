@@ -1,8 +1,14 @@
 import { Inngest } from 'inngest';
 
 // Create a client to send and receive events
-
-export const inngest = new Inngest({
+const client = new Inngest({
   id: 'my-app',
   eventKey: process.env.INNGEST_EVENT_KEY,
+  env: process.env.NODE_ENV,
 });
+
+if (process.env.INNGEST_EVENT_KEY) {
+  console.log('event key: ', process.env.INNGEST_EVENT_KEY);
+  client.setEventKey(process.env.INNGEST_EVENT_KEY);
+}
+export const inngest = client;
