@@ -21,7 +21,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     const responseBody = await httpResponse.json();
 
-    if (responseBody.retorno.status_processamento !== '3') return [];
+    if (responseBody.retorno.status_processamento !== '3')
+      throw new Error('problema com a chamada');
 
     paginas = responseBody.retorno.numero_paginas || 0;
 
