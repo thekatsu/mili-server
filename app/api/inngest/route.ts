@@ -8,6 +8,9 @@ export const { GET, POST, PUT } = serve({
   signingKey: process.env.INNGEST_SIGNING_KEY,
   id: 'my-app',
   logLevel: 'debug',
+  baseUrl: 'https://app.inngest.com',
+  serveHost: 'https://mili-server.vercel.app',
+  servePath: '/api/inngest',
 });
 
 // export const { GET, POST, PUT } = serve(ingest, {
