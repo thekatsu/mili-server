@@ -4,5 +4,4 @@ import { Inngest } from 'inngest';
 
 export const inngest = new Inngest({
   id: 'mili-server',
-  env: process.env.BRANCH,
 });

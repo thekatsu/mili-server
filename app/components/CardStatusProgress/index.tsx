@@ -22,7 +22,10 @@ export default function CardStatusProgress() {
   return (
     <Card className="mx-auto w-full max-w-3xl">
       <CardHeader>
-        <CardTitle>Products</CardTitle>
+        <CardTitle>
+          Products {process.env.INNGEST_SIGNING_KEY} |{' '}
+          {process.env.INNGEST_EVENT_KEY}
+        </CardTitle>
         <CardDescription>Importing product data</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
