@@ -33,7 +33,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
       await db.product.create({
         data: {
-          id: parseInt(product.id),
+          id: product.id,
           creationDate: dateFormat(product.data_criacao),
           name: product.nome,
           code: product.codigo,
