@@ -5,6 +5,7 @@ import { importProducts } from '@/app/inngest/functions';
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [importProducts],
+  signingKey: process.env.INNGEST_SIGNING_KEY,
 });
 
 // export const { GET, POST, PUT } = serve(ingest, {
