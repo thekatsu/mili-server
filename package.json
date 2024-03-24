@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "inngest:dev": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/inngest",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && prisma deploy",
     "lint": "next lint",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
