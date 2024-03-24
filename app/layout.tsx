@@ -16,7 +16,12 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <p>
+          {process.env.INNGEST_SIGNING_KEY} | {process.env.INNGEST_EVENT_KEY}
+        </p>
+        {children}
+      </body>
     </html>
   );
 }
