@@ -6,6 +6,8 @@ export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [importProducts],
   signingKey: process.env.INNGEST_SIGNING_KEY,
+  id: 'my-app',
+  logLevel: 'debug',
 });
 
 // export const { GET, POST, PUT } = serve(ingest, {
