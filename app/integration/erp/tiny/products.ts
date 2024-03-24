@@ -174,7 +174,7 @@ export async function getProducts() {
 
       await db.product.create({
         data: {
-          id: parseInt(product.id),
+          id: product.id,
           creationDate: formattedDate,
           name: product.nome,
           code: product.codigo,
