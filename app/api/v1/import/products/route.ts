@@ -86,7 +86,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   const total_elapsed_time = performance.now() - time_start;
 
-  return Response.json({
+  return await Response.json({
     message: 'OK',
     total_elapsed_time,
   });
