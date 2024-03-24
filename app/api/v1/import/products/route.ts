@@ -4,8 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const BASE_TINE_URL = 'https://api.tiny.com.br/api2';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET(req: NextRequest, res: NextResponse) {
   const time_start = performance.now();
   const pesquisa = '';
