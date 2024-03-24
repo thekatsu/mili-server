@@ -9,12 +9,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite" // "postgresql"
-  url      = "file:./dev.db" //env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model ConfigIntegration {
-  id               Int     @id @default(autoincrement())
+  id               String  @id @default(uuid())
   description      String // Tiny API2
   baseUrl          String // https://api.tiny.com.br/api2
   token            String
@@ -25,12 +25,12 @@ model ConfigIntegration {
 }
 
 model ConfigIntegrationAuth {
-  id   Int    @id @default(autoincrement())
+  id   String @id @default(uuid())
   type String // TOKEN | OAuth2 | etc
 }
 
 model ConfigIntegrationEndpoint {
-  id         Int     @id @default(autoincrement())
+  id         String  @id @default(uuid())
   name       String // Obter Produtos
   endpoint   String // produtos.pesquisa.php
   method     String // GET | POST | DELETE | UPDATE | PATCH
@@ -41,7 +41,7 @@ model ConfigIntegrationEndpoint {
 }
 
 model ConfigIntegrationMapper {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(uuid())
   endpoint Int
   entity   String //Product
   from     String //produto.id 
@@ -49,7 +49,7 @@ model ConfigIntegrationMapper {
 }
 
 model Product {
-  id                    Int       @id
+  id                    String    @id @default(uuid())
   name                  String
   code                  String
   price                 Decimal
@@ -100,7 +100,7 @@ model Product {
 }
 
 model Partner {
-  id           Int      @id
+  id           String   @id @default(uuid())
   code         String
   name         String
   nickname     String
