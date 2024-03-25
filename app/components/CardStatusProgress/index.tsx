@@ -34,7 +34,9 @@ export default function CardStatusProgress() {
               Importing product data
             </p>
           </div>
-          <StartButton callback={headleStartImport} />
+          <form action={headleStartImport}>
+            <StartButton callback={headleStartImport} />
+          </form>
         </div>
         <div className="flex items-center gap-4">
           <InfoIcon className="h-6 w-6" />
