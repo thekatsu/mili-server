@@ -9,16 +9,16 @@ import { Progress } from '@/app/components/ui/progress';
 import StartButton from './StartButton';
 import { inngest } from '@/app/inngest/client';
 
+async function headleStartImport() {
+  'use server';
+
+  console.log('aciona inngest!');
+  await inngest.send({
+    name: 'test/products.import',
+  });
+}
+
 export default function CardStatusProgress() {
-  async function headleStartImport() {
-    'use server';
-
-    console.log('aciona inngest!');
-    await inngest.send({
-      name: 'test/products.import',
-    });
-  }
-
   return (
     <Card className="mx-auto w-full max-w-3xl">
       <CardHeader>
