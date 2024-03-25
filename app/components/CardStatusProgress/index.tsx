@@ -13,6 +13,8 @@ import { inngest } from '@/app/inngest/client';
 
 export default function CardStatusProgress() {
   async function headleStartImport() {
+    'use server';
+
     console.log('aciona inngest!');
     await inngest.send({
       name: 'test/products.import',
