@@ -7,7 +7,7 @@ import {
 } from '@/app/components/ui/card';
 import { Progress } from '@/app/components/ui/progress';
 import StartButton from './StartButton';
-import { inngest } from '@/app/inngest/client';
+import { inngest } from '@/inngs/client';
 
 async function headleStartImport() {
   'use server';
