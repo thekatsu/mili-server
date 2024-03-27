@@ -1,4 +1,4 @@
-import { inngest } from '@/app/inngest/client';
+import { inngest } from '@/inngs/client';
 import { getProducts } from '@/app/integration/erp/tiny';
 
 export const importProducts = inngest.createFunction(

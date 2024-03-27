@@ -1,4 +1,4 @@
-import { db } from '@/app/database/db';
+import { db } from '@/db';
 
 const REQUEST_PER_MINUTE = 30;
 
