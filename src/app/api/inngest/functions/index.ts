@@ -1,1 +1,1 @@
-export { importProducts } from '@/app/inngest/functions/import-products';
+export { importProducts } from '@/inngs/functions/import-products';
