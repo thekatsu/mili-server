@@ -1,4 +1,4 @@
-import { SideMenu } from '@/app/components/SideMenu';
+import { SideMenu } from '@/components/SideMenu';
 
 export default async function Layout({
   children,
@@ -7,23 +7,21 @@ export default async function Layout({
 }>) {
   const menu = {
     title: 'Configurações',
-    items: [
+    menus: [
       {
-        href: '/settings/general',
+        href: '/setting/general',
         label: 'Geral',
-        selected: true,
       },
       {
-        href: '/settings/integration',
+        href: '/setting/integration',
         label: 'Integração',
-        selected: false,
       },
     ],
   };
 
   return (
     <div className="flex flex-1 flex-row border-r border-slate-200 bg-slate-50 p-8">
-      <SideMenu menu={menu} />
+      <SideMenu title={menu.title} menus={menu.menus} />
       {children}
     </div>
   );
