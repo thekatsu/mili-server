@@ -5,11 +5,18 @@ import { Search } from 'lucide-react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 
+type IntegrationType = {
+  name: string;
+  description: string;
+  endpoint: string;
+}[];
+
 export default async function SettingsPage() {
   const response = await fetch('http://localhost:3000/api/v1/integration', {
     method: 'GET',
   });
-  const integrations = await response.json();
+  const json = await response.json();
+  const integrations: IntegrationType = json.data || [];
   console.log(integrations);
 
   return (
@@ -30,12 +37,12 @@ export default async function SettingsPage() {
 
       <main className="flex flex-1 flex-col">
         <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-          {integrations?.data.map((item) => (
+          {integrations.map((item, index) => (
             <IntegrationCard
-              key={item.href}
-              title={item.title}
+              key={index}
+              title={item.name}
               description={item.description}
-              href={item.href}
+              href={item.endpoint}
             />
           ))}
         </div>
