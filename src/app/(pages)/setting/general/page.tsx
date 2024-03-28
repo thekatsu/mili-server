@@ -14,8 +14,20 @@ import { Input } from '@/components/ui/input';
 
 export default async function SettingsPage() {
   return (
-    <main className="flex flex-1 flex-col gap-6">
+    <main className="">
       <Card>
+        <CardHeader>
+          <CardTitle>Titulo</CardTitle>
+          <CardDescription>Descrição</CardDescription>
+        </CardHeader>
+        <CardContent>Conteudo</CardContent>
+        <CardFooter className="border-t px-6 py-4">
+          <Button asChild>
+            <Link href="/qwe">Teste</Link>
+          </Button>
+        </CardFooter>
+      </Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Store Name</CardTitle>
           <CardDescription>
@@ -56,7 +68,7 @@ export default async function SettingsPage() {
         <CardFooter className="border-t px-6 py-4">
           <Button>Save</Button>
         </CardFooter>
-      </Card>
+      </Card> */}
     </main>
   );
 }

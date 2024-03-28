@@ -30,12 +30,12 @@ export function TopMenu() {
     {
       href: '/dashboard',
       label: 'Dashboard',
-      iconName: 'dashboard',
+      iconName: null,
     },
     {
       href: '/setting/general',
       label: 'Configurações',
-      iconName: 'integration',
+      iconName: null,
     },
   ];
 
@@ -52,10 +52,9 @@ export function TopMenu() {
                 pathname === menu.href && ['font-semibold', 'text-foreground'],
               )}
             >
-              {
+              {menu.iconName &&
                 // @ts-ignore
-                Icons[menu.iconName]({ className: 'h-5 w-5' })
-              }
+                Icons[menu.iconName]({ className: 'h-5 w-5' })}
               {index !== 0 && menu.label}
               <span className="sr-only">{menu.label}</span>
             </Link>
@@ -64,31 +63,29 @@ export function TopMenu() {
       </nav>
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className=" md:hidden">
-            <Menu className="h-5 " />
+          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+            <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
         <SheetContent side="left">
-          <nav className="text-md grid gap-4 ">
+          <nav className="grid gap-6">
             {menus.map((menu, index) => {
               return (
                 <Link
                   key={menu.href}
                   href={menu.href}
                   className={cn(
-                    'flex items-center gap-2 ',
+                    'flex items-center gap-2 text-base hover:text-foreground',
                     pathname === menu.href && [
-                      'text-muted-foreground',
                       'text-foreground',
                       'font-medium',
                     ],
-                    index == 0 && 'mb-4 text-xl font-medium text-foreground',
+                    index == 0 && 'mb-2 text-xl font-bold text-foreground',
                   )}
                 >
-                  {
+                  {menu.iconName &&
                     // @ts-ignore
-                    Icons[menu.iconName]({ className: 'h-5 w-5' })
-                  }
+                    Icons[menu.iconName]({ className: 'h-5 w-5' })}
                   {menu.label}
                   <span className="sr-only">{menu.label}</span>
                 </Link>

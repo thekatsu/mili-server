@@ -19,12 +19,10 @@ export function SideMenu({ title, menus, ...props }: SideMenuProps) {
 
   return (
     // flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10
-    <nav className="mr-6 flex max-w-6xl flex-col gap-6" {...props}>
-      <div className="mx-auto grid w-full gap-2">
-        <h1 className="text-3xl font-semibold">{title}</h1>
-      </div>
+
+    <nav className="r-6 grid max-w-6xl flex-col gap-6" {...props}>
       <div className="mx-auto grid w-full items-start gap-6 ">
-        <div className="grid gap-4 text-sm text-muted-foreground">
+        <div className="flex gap-4 text-sm text-muted-foreground md:grid">
           {menus.map((menu) => (
             <Link
               key={menu.href}
