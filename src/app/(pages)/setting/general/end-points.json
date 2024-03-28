@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Clientes",
+    "description": "Importa os dados principais de todos os clientes ativos.",
+    "href": "/setting/1/edit"
+  },
+  {
+    "title": "Dados Adicionais de Clientes",
+    "description": "Importa dados adicionais dos clientes previamente importados não atualizados a mais de X minutos.",
+    "href": "/setting/1/edit"
+  },
+  {
+    "title": "Produtos",
+    "description": "Importa dados principais dos produtos.",
+    "href": "/setting/1/edit"
+  },
+  {
+    "title": "Dados Adicionais de Produtos",
+    "description": "Importa dados adicionais dos produtos previamente importados não atualizados a mais de X minutos.",
+    "href": "/setting/2/edit"
+  },
+  {
+    "title": "Estoques",
+    "description": "",
+    "href": "/setting/1/edit"
+  },
+  {
+    "title": "Estrutura de Produtos",
+    "description": "",
+    "href": "/setting/1/edit"
+  },
+  {
+    "title": "Gategorias de Produtos",
+    "description": "",
+    "href": "/setting/1/edit"
+  },
+  {
+    "title": "Tags de Produtos",
+    "description": "",
+    "href": "/setting/1/edit"
+  }
+]

@@ -7,10 +7,11 @@ CREATE TYPE "IntegrationAuthType" AS ENUM ('TOKEN', 'OAUTH2');
 -- CreateTable
 CREATE TABLE "ConfigIntegration" (
     "id" UUID NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
     "description" VARCHAR(500) NOT NULL,
     "baseUrl" VARCHAR(255) NOT NULL,
     "token" VARCHAR(512) NOT NULL,
-    "params" JSONB NOT NULL DEFAULT {token: config.token, formato: 'json'},
+    "params" JSONB NOT NULL DEFAULT '{}',
     "type" "IntegrationType" NOT NULL,
     "requestPerMinute" INTEGER NOT NULL,
     "active" BOOLEAN NOT NULL,

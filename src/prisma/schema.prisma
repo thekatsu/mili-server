@@ -20,10 +20,11 @@ enum IntegrationType {
 
 model ConfigIntegration {
   id                         String                      @id @default(uuid()) @db.Uuid
+  name                       String                      @db.VarChar(100) // Tiny API2
   description                String                      @db.VarChar(500) // Tiny API2
   baseUrl                    String                      @db.VarChar(255) // https://api.tiny.com.br/api2
   token                      String                      @db.VarChar(512)
-  params                     Json                        @default(dbgenerated("{token: config.token, formato: 'json'}")) // {token: config.token, formato: 'json'} -> &token=''&formato=json
+  params                     Json                        @default(dbgenerated("'{}'")) // {token: config.token, formato: 'json'} -> &token=''&formato=json
   type                       IntegrationType // REST | SOAP 
   requestPerMinute           Int                         @db.Integer
   active                     Boolean                     @db.Boolean
