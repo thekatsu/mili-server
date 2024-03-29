@@ -24,7 +24,7 @@ export default async function Layout({
       <div className="mx-auto grid w-full gap-2">
         <h1 className="text-3xl font-semibold">{menu.title}</h1>
 
-        <div className="mx-auto grid w-full items-start gap-6 md:grid-cols-[250px_1fr]">
+        <div className="mx-auto grid w-full items-start gap-6 md:grid-cols-[230px_1fr]">
           <SideMenu title={menu.title} menus={menu.menus} />
           <div className="grid gap-6">{children}</div>
         </div>

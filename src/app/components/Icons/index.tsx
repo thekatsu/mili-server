@@ -3,10 +3,6 @@ import { CiBeerMugFull } from 'react-icons/ci';
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
 import { GrIntegration } from 'react-icons/gr';
 
-type IconProps = {
-  children: React.ReactNode;
-};
-
 export function logo({ ...props }) {
   return <SiWebmoney {...props} />;
 }

@@ -4,20 +4,11 @@ import IntegrationCard from '@/app/components/IntegrationCard';
 import { Search } from 'lucide-react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
-
-type IntegrationType = {
-  name: string;
-  description: string;
-  endpoint: string;
-}[];
+import { ConfigIntegration } from '@prisma/client';
+import { fetchConfigIntegration } from '@/app/api/v1/integration/actions';
 
 export default async function SettingsPage() {
-  const response = await fetch('http://localhost:3000/api/v1/integration', {
-    method: 'GET',
-  });
-  const json = await response.json();
-  const integrations: IntegrationType = json.data || [];
-  console.log(integrations);
+  const response: ConfigIntegration[] = await fetchConfigIntegration();
 
   return (
     <>
@@ -37,12 +28,12 @@ export default async function SettingsPage() {
 
       <main className="flex flex-1 flex-col">
         <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-          {integrations.map((item, index) => (
+          {response.map((item) => (
             <IntegrationCard
-              key={index}
+              key={item.id}
               title={item.name}
               description={item.description}
-              href={item.endpoint}
+              href={`/setting/integration/${item.id}/edit`}
             />
           ))}
         </div>
