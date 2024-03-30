@@ -10,7 +10,6 @@ export async function GET() {
     requestPerMinute: 30,
     token: '',
     type: 'SOAP',
-    active: true,
     params: '',
   });
 
