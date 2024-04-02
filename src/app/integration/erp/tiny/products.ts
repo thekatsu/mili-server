@@ -147,6 +147,8 @@ export async function getProducts() {
   let products;
 
   for (let pagina = 1; pagina <= paginas; pagina++) {
+    const timeStart = performance.now();
+
     const httpResponse = await fetch(
       `https://api.tiny.com.br/api2/produtos.pesquisa.php?token=${token}&pesquisa=${pesquisa}&situacao=A&pagina=${pagina}&formato=json`,
       {
@@ -154,9 +156,13 @@ export async function getProducts() {
       },
     );
 
-    const responseBody: Response = await httpResponse.json();
-
-    if (responseBody.retorno.status_processamento !== '3') return [];
+    const responseBody = await httpResponse.json();
+    if (responseBody.retorno.status_processamento !== '3') {
+      const oneMinute = 1000 * 60;
+      console.log(`esperar por ${oneMinute}ms`);
+      await sleep(oneMinute);
+      return;
+    }
 
     paginas = responseBody.retorno.numero_paginas || 0;
 
@@ -219,7 +225,17 @@ export async function getProducts() {
         },
       });
     }
-    console.timeEnd('dbsave');
+
+    const elapsedTime = parseInt((performance.now() - timeStart).toFixed(0));
+    const windowTime = (60 / REQUEST_PER_MINUTE) * 1000;
+
+    console.log(`windowTime: ${windowTime} - elapsedTime: ${elapsedTime}`);
+
+    if (elapsedTime < windowTime) {
+      const time = parseInt((windowTime - elapsedTime + 50).toFixed(0));
+      console.log(`esperar por ${time}ms`);
+      await sleep(time);
+    }
   }
 
   db.$disconnect();
