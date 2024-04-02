@@ -32,7 +32,9 @@ export default function IntegrationCard({
       <CardContent className="flex-1 p-0">{content}</CardContent>
       <CardFooter className="items-end justify-end p-2">
         <Button variant="outline" asChild>
-          <Link href={href}>Editar</Link>
+          <Link href={href} scroll={false}>
+            Editar
+          </Link>
         </Button>
       </CardFooter>
     </Card>

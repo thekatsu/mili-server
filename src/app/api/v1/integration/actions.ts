@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 const FormSchema = z.object({
   id: z.string().uuid(),
-  name: z.string().max(2),
+  name: z.string().max(100),
   description: z.string().max(500),
   baseUrl: z.string().url().max(255),
   token: z.string().max(512),
@@ -103,5 +103,42 @@ export async function createConfigIntegration(
   } catch (err) {
     console.error('Database error: ', err);
     throw new Error('Failed to fetch Config Integration data.');
+  }
+}
+
+export async function updateConfigIntegration(
+  data: FormSchemaType,
+): Promise<FormSchemaType> {
+  try {
+    // Create one ConfigIntegration
+    const updated = await db.configIntegration.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        name: data.name,
+        description: data.description,
+        baseUrl: data.baseUrl,
+        requestPerMinute: data.requestPerMinute,
+        token: data.token,
+        type: data.type,
+        active: true,
+      },
+    });
+
+    return {
+      id: updated.id,
+      name: updated.name,
+      description: updated.description,
+      baseUrl: updated.baseUrl,
+      token: updated.token,
+      params: updated.params?.toString() || '{}',
+      type: updated.type,
+      requestPerMinute: updated.requestPerMinute,
+      active: updated.active,
+    };
+  } catch (err) {
+    console.error('Database error: ', err);
+    throw new Error('Failed to update Config Integration data.');
   }
 }

@@ -138,10 +138,6 @@ function FormInput(field: FormFieldType, { ...item }) {
   );
 }
 
-type FormEditProps = {
-  formData: Promise<FormSchemaType | null>;
-};
-
 export const FormSchema = z.object({
   id: z.string().uuid(),
   name: z.string().max(2),
@@ -153,6 +149,10 @@ export const FormSchema = z.object({
   requestPerMinute: z.number(),
   active: z.boolean(),
 });
+
+type FormEditProps = {
+  formData: Promise<FormSchemaType | null>;
+};
 
 export function FormEdit({ formData }: FormEditProps) {
   const integration = use(formData);

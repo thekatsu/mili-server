@@ -1,6 +1,6 @@
-import erp from './erps.json';
-import endpoints from './end-points.json';
-import IntegrationCard from '@/app/components/IntegrationCard';
+// import erp from './erps.json';
+// import endpoints from './end-points.json';
+import IntegrationCard from '@/app/components/integration-card';
 import { Search } from 'lucide-react';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';

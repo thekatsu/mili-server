@@ -1,6 +1,5 @@
 import { fetchByIdConfigIntegration } from '@/app/api/v1/integration/actions';
-import { FormEdit } from '@/app/(pages)/setting/integration/[id]/edit/form-data';
-import { Suspense } from 'react';
+import { FormEdit } from '@/app/setting/integration/[id]/edit/form-data';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const data = fetchByIdConfigIntegration(params.id);

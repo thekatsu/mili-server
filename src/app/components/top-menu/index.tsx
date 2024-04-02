@@ -9,14 +9,13 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import * as Icons from '@/components/Icons';
-import { CircleUser, Menu, Package2, Search } from 'lucide-react';
+import * as Icons from '@/app/components/icons';
+import { CircleUser, Menu, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/app/lib/utils';
-import { IconType } from 'react-icons/lib';
 
 export function TopMenu() {
   const pathname = usePathname();
@@ -33,7 +32,7 @@ export function TopMenu() {
       iconName: null,
     },
     {
-      href: '/setting/general',
+      href: '/setting/integration',
       label: 'Configurações',
       iconName: null,
     },
