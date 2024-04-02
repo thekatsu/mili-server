@@ -1,6 +1,6 @@
 'use client';
 
-import { ModalForm } from '@/app/components/modal-form';
+import { ModalForm } from '@/components/modal-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

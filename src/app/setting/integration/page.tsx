@@ -1,9 +1,9 @@
 // import erp from './erps.json';
 // import endpoints from './end-points.json';
-import IntegrationCard from '@/app/components/integration-card';
+import IntegrationCard from '@/components/integration-card';
 import { Search } from 'lucide-react';
-import { Input } from '@/app/components/ui/input';
-import { Button } from '@/app/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { ConfigIntegration } from '@prisma/client';
 import { fetchConfigIntegration } from '@/app/api/v1/integration/actions';
 

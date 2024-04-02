@@ -4,8 +4,8 @@ import {
   CardHeader,
   CardContent,
   Card,
-} from '@/app/components/ui/card';
-import { Progress } from '@/app/components/ui/progress';
+} from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import StartButton from './StartButton';
 import { inngest } from '@/inngs/client';
 

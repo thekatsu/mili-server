@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,8 +8,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/app/components/ui/card';
-import { Input } from '@/app/components/ui/input';
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -20,10 +20,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/app/components/ui/form';
+} from '@/components/ui/form';
 import { HTMLInputTypeAttribute, use, useEffect, useState } from 'react';
-import { RadioGroup, RadioGroupItem } from '@/app/components/ui/radio-group';
-import { Label } from '@/app/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { FormSchemaType } from '@/api/v1/integration/actions';
 import { z } from 'zod';
 

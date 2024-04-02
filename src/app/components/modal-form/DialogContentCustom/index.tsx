@@ -1,4 +1,4 @@
-import { DialogOverlay, DialogPortal } from '@/app/components/ui/dialog';
+import { DialogOverlay, DialogPortal } from '@/components/ui/dialog';
 import { cn } from '@/app/lib/utils';
 import { Content } from '@radix-ui/react-dialog';
 

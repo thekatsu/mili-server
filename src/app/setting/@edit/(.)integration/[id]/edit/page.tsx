@@ -1,4 +1,4 @@
-import IntegrationForm from '@/app/components/integration-form';
+import IntegrationForm from '@/components/integration-form';
 import { Modal } from './modal';
 import {
   fetchByIdConfigIntegration,

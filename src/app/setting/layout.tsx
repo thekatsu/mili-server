@@ -1,4 +1,4 @@
-import { SideMenu } from '@/app/components/side-menu';
+import { SideMenu } from '@/components/side-menu';
 
 export default async function Layout({
   children,

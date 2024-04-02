@@ -10,7 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/app/components/ui/form';
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
   FormSchema,

@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/app/components/ui/dialog';
+} from '@/components/ui/dialog';
 import { cn } from '@/app/lib/utils';
 
 export function ModalForm({
