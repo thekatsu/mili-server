@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import * as Icons from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { CircleUser, Menu, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -53,7 +53,7 @@ export function TopMenu() {
             >
               {menu.iconName &&
                 // @ts-ignore
-                Icons[menu.iconName]({ className: 'h-5 w-5' })}
+                Icon[menu.iconName]({ className: 'h-5 w-5' })}
               {index !== 0 && menu.label}
               <span className="sr-only">{menu.label}</span>
             </Link>
@@ -84,7 +84,7 @@ export function TopMenu() {
                 >
                   {menu.iconName &&
                     // @ts-ignore
-                    Icons[menu.iconName]({ className: 'h-5 w-5' })}
+                    Icon[menu.iconName]({ className: 'h-5 w-5' })}
                   {menu.label}
                   <span className="sr-only">{menu.label}</span>
                 </Link>
