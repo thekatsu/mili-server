@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons/index';
 import { CircleUser, Menu, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
