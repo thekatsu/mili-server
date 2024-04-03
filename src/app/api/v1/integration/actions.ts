@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/db';
+import { db } from '@/app/api/db';
 import { z } from 'zod';
 
 const FormSchema = z.object({

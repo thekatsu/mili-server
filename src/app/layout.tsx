@@ -1,10 +1,8 @@
-import '@/styles/globals.css';
+import '@/app/styles/globals.css';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
-import { cn } from '@/lib/utils';
-import { TopMenu } from '@/components/top-menu';
-import React from 'react';
+import { cn } from '@/app/lib/utils';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -30,7 +28,6 @@ export default async function RootLayout({
         )}
       >
         <div className="flex min-h-screen w-full flex-col ">
-          <TopMenu />
           <div className="flex flex-1 bg-slate-50 ">{children}</div>
         </div>
       </body>

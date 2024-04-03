@@ -1,5 +1,5 @@
-import { awaitFor, dateFormat, sleep } from '@/app/api/utils';
-import { db } from '@/db';
+import { awaitFor, dateFormat, sleep } from '@/app/lib/utils';
+import { db } from '@/app/api/db';
 import { NextRequest, NextResponse } from 'next/server';
 
 const BASE_TINE_URL = 'https://api.tiny.com.br/api2';
