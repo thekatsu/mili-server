@@ -1,3 +1,5 @@
+'use client';
+
 import { SiWebmoney } from 'react-icons/si';
 import { CiBeerMugFull } from 'react-icons/ci';
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
