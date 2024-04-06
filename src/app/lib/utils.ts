@@ -24,3 +24,7 @@ export async function awaitFor(elapsed_time: number, goal: number) {
     await sleep(goal - elapsed_time);
   }
 }
+
+export function fetcher(url: string) {
+  return fetch(url).then((r) => r.json());
+}

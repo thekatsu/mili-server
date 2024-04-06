@@ -72,7 +72,7 @@ model ConfigIntegrationMapper {
 }
 
 model Product {
-  id                    String    @id @default(uuid()) @db.VarChar(50)
+  id                    String        @id @default(uuid()) @db.VarChar(50)
   name                  String
   code                  String
   price                 Decimal
@@ -118,8 +118,33 @@ model Product {
   seoKeywords           String?
   linkVideo             String?
   slug                  String?
+  image                 String?
   importedDetails       Boolean?
   datailsImportedAt     DateTime?
+  ProductTag            ProductTags[]
+}
+
+model TagGroup {
+  id   String @id @default(uuid())
+  name String
+  Tag  Tag[]
+}
+
+model Tag {
+  id         String        @id @default(uuid())
+  name       String
+  tagGroup   TagGroup      @relation(fields: [tagGroupId], references: [id])
+  tagGroupId String
+  ProductTag ProductTags[]
+}
+
+model ProductTags {
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  tag       Tag     @relation(fields: [tagId], references: [id])
+  tagId     String
+
+  @@id([productId, tagId])
 }
 
 model Partner {
@@ -142,4 +167,13 @@ model Partner {
   sellerName   String
   active       String
   creationDate DateTime
+}
+
+model IntegrationProgress {
+  id         String    @id @default(uuid()) @db.Uuid
+  key        String    @db.VarChar(50)
+  startDate  DateTime  @db.Timestamp()
+  endDate    DateTime? @db.Timestamp()
+  step       Int       @db.Integer
+  totalSteps Int       @db.Integer
 }

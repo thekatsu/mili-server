@@ -1,4 +1,4 @@
-import { createConfigIntegration } from '@/app/api/v1/integration/actions';
+import { createConfigIntegration } from '@/app/api/v1/integration/config/actions';
 
 export const dynamic = 'force-dynamic';
 

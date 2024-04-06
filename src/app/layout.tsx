@@ -23,13 +23,11 @@ export default async function RootLayout({
     <html lang="pt">
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'flex min-h-screen flex-row bg-background bg-slate-200 font-sans antialiased',
           fontSans.variable,
         )}
       >
-        <div className="flex min-h-screen w-full flex-col ">
-          <div className="flex flex-1 bg-slate-50 ">{children}</div>
-        </div>
+        {children}
       </body>
     </html>
   );

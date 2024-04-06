@@ -1,6 +1,8 @@
 import { db } from '@/app/api/db';
+import { sleep } from '@/app/lib/utils';
 
 const REQUEST_PER_MINUTE = 30;
+const TOKEN = '3e534d3b2f9fa470a4e7004216d2861118fbe485';
 
 type Response = {
   retorno: {
@@ -63,94 +65,167 @@ type Response = {
   };
 };
 
-export async function getProductsInfo() {
-  const token = '3e534d3b2f9fa470a4e7004216d2861118fbe485';
-  const products = await db.product.findMany({ select: { id: true } });
+export async function getProductTags(id: string) {
+  const timeStart = performance.now();
 
-  for (const product of products) {
-    const timeStart = performance.now();
-
-    const httpResponse = await fetch(
-      `https://api.tiny.com.br/api2/produto.obter.php?token=${token}&id=${product.id}&formato=json`,
-      {
-        method: 'POST',
-      },
-    );
-    const responseBody = await httpResponse.json();
-    if (responseBody.retorno.status_processamento !== '3') {
-      const oneMinute = 1000 * 60;
-      console.log(`esperar por ${oneMinute}ms`);
-      await sleep(oneMinute);
-      return;
-    }
-    const prod = responseBody.retorno.produto;
-    const data = {
-      ncm: prod.ncm,
-      origin: prod.origem,
-      gtinPackaging: prod.gtin_embalagem,
-      netWeight: prod.peso_liquido,
-      grossWeight: prod.peso_bruto,
-      minimumStock: prod.estoque_minimo,
-      maximumStock: prod.estoque_maximo,
-      unitsPerBox: prod.unidade_por_caixa,
-      type: prod.tipo,
-      IPIClass: prod.classe_ipi,
-      fixedIPIValue: prod.valor_ipi_fixo,
-      codeListService: prod.cod_lista_servicos,
-      additionalDescription: prod.descricao_complementar,
-      note: prod.obs,
-      guarantee: prod.garantia,
-      cest: prod.cest,
-      idParent: parseInt(prod.idProdutoPai),
-      brand: prod.marca,
-      packagingType: parseInt(prod.tipoEmbalagem),
-      packagingHeight: prod.alturaEmbalagem,
-      packagingWidth: prod.larguraEmbalagem,
-      packagingLength: prod.comprimentoEmbalagem,
-      packagingDiameter: prod.diametroEmbalagem,
-      category: prod.categoria,
-      class: prod.classe_produto,
-      seoTitle: prod.seo_title,
-      seoDescription: prod.seo_description,
-      seoKeywords: prod.seo_keywords,
-      linkVideo: prod.link_video,
-      slug: prod.slug,
-    };
-
-    console.log(`processando produto: ${product.id}`);
-
-    await db.product.update({
-      where: {
-        id: product.id,
-      },
-      data: data,
-    });
-
-    const elapsedTime = parseInt((performance.now() - timeStart).toFixed(0));
-    const windowTime = (60 / REQUEST_PER_MINUTE) * 1000;
-
-    console.log(`windowTime: ${windowTime} - elapsedTime: ${elapsedTime}`);
-
-    if (elapsedTime < windowTime) {
-      const time = parseInt((windowTime - elapsedTime + 50).toFixed(0));
-      console.log(`esperar por ${time}ms`);
-      await sleep(time);
-    }
+  const httpResponse = await fetch(
+    `https://api.tiny.com.br/api2/produto.obter.tags?token=${TOKEN}&id=${id}&formato=json`,
+    {
+      method: 'POST',
+    },
+  );
+  const responseBody = await httpResponse.json();
+  if (responseBody.retorno.status_processamento !== '3') {
+    const oneMinute = 1000 * 60;
+    console.log(`esperar por ${oneMinute}ms`);
+    await sleep(oneMinute);
+    return;
   }
+  const prod: {
+    id: string;
+    nome: string;
+    codigo: string;
+    tags: {
+      tag: {
+        id_tag: string;
+        nome_tag: string;
+      };
+    }[];
+  } = responseBody.retorno.produto;
+  const productTags = prod.tags.map((tags) => {
+    return {
+      productId: prod.id,
+      tagId: tags.tag.id_tag,
+    };
+  });
+
+  console.log(`processando produto: ${id}`);
+
+  productTags.forEach(async (prodTags) => {
+    await db.productTags.upsert({
+      where: {
+        productId_tagId: prodTags,
+      },
+      create: prodTags,
+      update: prodTags,
+    });
+  });
+
+  const elapsedTime = parseInt((performance.now() - timeStart).toFixed(0));
+  const windowTime = (60 / REQUEST_PER_MINUTE) * 1000;
+
+  console.log(`windowTime: ${windowTime} - elapsedTime: ${elapsedTime}`);
+
+  if (elapsedTime < windowTime) {
+    const time = parseInt((windowTime - elapsedTime + 50).toFixed(0));
+    console.log(`esperar por ${time}ms`);
+    await sleep(time);
+  }
+
+  db.$disconnect();
+}
+
+export async function getProductInfo(id: string) {
+  const timeStart = performance.now();
+
+  const httpResponse = await fetch(
+    `https://api.tiny.com.br/api2/produto.obter.php?token=${TOKEN}&id=${id}&formato=json`,
+    {
+      method: 'POST',
+    },
+  );
+  const responseBody = await httpResponse.json();
+  if (responseBody.retorno.status_processamento !== '3') {
+    const oneMinute = 1000 * 60;
+    console.log(`esperar por ${oneMinute}ms`);
+    await sleep(oneMinute);
+    return;
+  }
+  const prod = responseBody.retorno.produto;
+  const image = prod?.anexos[0]?.anexo;
+  const data = {
+    ncm: prod.ncm,
+    origin: prod.origem,
+    gtinPackaging: prod.gtin_embalagem,
+    netWeight: prod.peso_liquido,
+    grossWeight: prod.peso_bruto,
+    minimumStock: prod.estoque_minimo,
+    maximumStock: prod.estoque_maximo,
+    unitsPerBox: prod.unidade_por_caixa,
+    type: prod.tipo,
+    IPIClass: prod.classe_ipi,
+    fixedIPIValue: prod.valor_ipi_fixo,
+    codeListService: prod.cod_lista_servicos,
+    additionalDescription: prod.descricao_complementar,
+    note: prod.obs,
+    guarantee: prod.garantia,
+    cest: prod.cest,
+    idParent: parseInt(prod.idProdutoPai),
+    brand: prod.marca,
+    packagingType: parseInt(prod.tipoEmbalagem),
+    packagingHeight: prod.alturaEmbalagem,
+    packagingWidth: prod.larguraEmbalagem,
+    packagingLength: prod.comprimentoEmbalagem,
+    packagingDiameter: prod.diametroEmbalagem,
+    category: prod.categoria,
+    class: prod.classe_produto,
+    seoTitle: prod.seo_title,
+    seoDescription: prod.seo_description,
+    seoKeywords: prod.seo_keywords,
+    linkVideo: prod.link_video,
+    slug: prod.slug,
+    image: image,
+  };
+
+  console.log(`processando produto: ${id}`);
+
+  await db.product.update({
+    where: {
+      id: id,
+    },
+    data: data,
+  });
+
+  const elapsedTime = parseInt((performance.now() - timeStart).toFixed(0));
+  const windowTime = (60 / REQUEST_PER_MINUTE) * 1000;
+
+  console.log(`windowTime: ${windowTime} - elapsedTime: ${elapsedTime}`);
+
+  if (elapsedTime < windowTime) {
+    const time = parseInt((windowTime - elapsedTime + 50).toFixed(0));
+    console.log(`esperar por ${time}ms`);
+    await sleep(time);
+  }
+
   db.$disconnect();
 }
 
 export async function getProducts() {
-  const token = '3e534d3b2f9fa470a4e7004216d2861118fbe485';
   const pesquisa = '';
   let paginas = 1;
   let products;
+
+  let estimatedRecords = await db.product.count();
+
+  const eventId = await db.integrationProgress.create({
+    select: {
+      id: true,
+    },
+    data: {
+      key: 'products',
+      startDate: new Date(),
+      step: 0,
+      totalSteps: estimatedRecords,
+    },
+  });
+
+  console.log('id do evento: ', eventId.id);
 
   for (let pagina = 1; pagina <= paginas; pagina++) {
     const timeStart = performance.now();
 
     const httpResponse = await fetch(
-      `https://api.tiny.com.br/api2/produtos.pesquisa.php?token=${token}&pesquisa=${pesquisa}&situacao=A&pagina=${pagina}&formato=json`,
+      `https://api.tiny.com.br/api2/produtos.pesquisa.php?token=${TOKEN}&pesquisa=${pesquisa}&situacao=A&pagina=${pagina}&formato=json`,
       {
         method: 'POST',
       },
@@ -168,7 +243,30 @@ export async function getProducts() {
 
     products = responseBody.retorno.produtos || [];
 
+    let estimatedRecords = (paginas - 1) * 100 + products.length;
+    await db.integrationProgress.update({
+      data: {
+        totalSteps: estimatedRecords,
+      },
+      where: {
+        id: eventId.id,
+        key: 'products',
+      },
+    });
+
+    let step = (pagina - 1) * 100;
     for (const pro of products) {
+      step++;
+      await db.integrationProgress.update({
+        data: {
+          step: step,
+        },
+        where: {
+          id: eventId.id,
+          key: 'products',
+        },
+      });
+
       const product = pro.produto;
       let formattedDate = null;
       if (product.data_criacao) {
@@ -177,53 +275,62 @@ export async function getProducts() {
         formattedDate = new Date(`${ano}-${mes}-${dia}T${horario}.0000`);
       }
 
-      await db.product.create({
-        data: {
+      const productData = {
+        id: product.id,
+        creationDate: formattedDate,
+        name: product.nome,
+        code: product.codigo,
+        price: product.preco,
+        promocionalPrice: product.preco_promocional,
+        unit: product.unidade,
+        gtin: product.gtin,
+        variationType: product.tipoVariacao,
+        location: product.localizacao,
+        costPrice: product.preco_custo,
+        averageCostPrice: product.preco_custo_medio,
+        situation: product.situacao,
+        ncm: product.ncm,
+        origin: product.origem,
+        gtinPackaging: product.gtin_embalagem,
+        netWeight: product.peso_liquido,
+        grossWeight: product.peso_bruto,
+        minimumStock: product.estoque_minimo,
+        maximumStock: product.estoque_maximo,
+        unitsPerBox: product.unidade_por_caixa,
+        type: product.tipo,
+        IPIClass: product.classe_ipi,
+        fixedIPIValue: product.valor_ipi_fixo,
+        codeListService: product.cod_lista_servicos,
+        additionalDescription: product.descricao_complementar,
+        note: product.obs,
+        guarantee: product.garantia,
+        cest: product.cest,
+        idParent: product.idProdutoPai,
+        brand: product.marca,
+        packagingType: product.tipoEmbalagem,
+        packagingHeight: product.alturaEmbalagem,
+        packagingWidth: product.larguraEmbalagem,
+        packagingLength: product.comprimentoEmbalagem,
+        packagingDiameter: product.diametroEmbalagem,
+        category: product.categoria,
+        class: product.classe_produto,
+        seoTitle: product.seo_title,
+        seoDescription: product.seo_description,
+        seoKeywords: product.seo_keywords,
+        linkVideo: product.link_video,
+        slug: product.slug,
+      };
+
+      await db.product.upsert({
+        where: {
           id: product.id,
-          creationDate: formattedDate,
-          name: product.nome,
-          code: product.codigo,
-          price: product.preco,
-          promocionalPrice: product.preco_promocional,
-          unit: product.unidade,
-          gtin: product.gtin,
-          variationType: product.tipoVariacao,
-          location: product.localizacao,
-          costPrice: product.preco_custo,
-          averageCostPrice: product.preco_custo_medio,
-          situation: product.situacao,
-          ncm: product.ncm,
-          origin: product.origem,
-          gtinPackaging: product.gtin_embalagem,
-          netWeight: product.peso_liquido,
-          grossWeight: product.peso_bruto,
-          minimumStock: product.estoque_minimo,
-          maximumStock: product.estoque_maximo,
-          unitsPerBox: product.unidade_por_caixa,
-          type: product.tipo,
-          IPIClass: product.classe_ipi,
-          fixedIPIValue: product.valor_ipi_fixo,
-          codeListService: product.cod_lista_servicos,
-          additionalDescription: product.descricao_complementar,
-          note: product.obs,
-          guarantee: product.garantia,
-          cest: product.cest,
-          idParent: product.idProdutoPai,
-          brand: product.marca,
-          packagingType: product.tipoEmbalagem,
-          packagingHeight: product.alturaEmbalagem,
-          packagingWidth: product.larguraEmbalagem,
-          packagingLength: product.comprimentoEmbalagem,
-          packagingDiameter: product.diametroEmbalagem,
-          category: product.categoria,
-          class: product.classe_produto,
-          seoTitle: product.seo_title,
-          seoDescription: product.seo_description,
-          seoKeywords: product.seo_keywords,
-          linkVideo: product.link_video,
-          slug: product.slug,
         },
+        create: productData,
+        update: productData,
       });
+
+      await getProductInfo(product.id);
+      await getProductTags(product.id);
     }
 
     const elapsedTime = parseInt((performance.now() - timeStart).toFixed(0));
@@ -238,13 +345,23 @@ export async function getProducts() {
     }
   }
 
+  await db.integrationProgress.update({
+    data: {
+      step: estimatedRecords,
+      endDate: new Date(),
+    },
+    where: {
+      id: eventId.id,
+      key: 'products',
+    },
+  });
+
   db.$disconnect();
 
   return products;
 }
 
 export async function getChangedProducts() {
-  const token = '3e534d3b2f9fa470a4e7004216d2861118fbe485';
   const date = new Date(Date.UTC(2024, 3, 2, 0, 0, 0));
   const dataAlteracao = date.toLocaleString('pt-BR').replace(',', '');
 
@@ -253,7 +370,7 @@ export async function getChangedProducts() {
 
   for (let pagina = 1; pagina <= paginas; pagina++) {
     const httpResponse = await fetch(
-      `https://api.tiny.com.br/api2/lista.atualizacoes.produtos?token=${token}&dataAlteracao=${dataAlteracao}&pagina=${pagina}&formato=json`,
+      `https://api.tiny.com.br/api2/lista.atualizacoes.produtos?token=${TOKEN}&dataAlteracao=${dataAlteracao}&pagina=${pagina}&formato=json`,
       {
         method: 'POST',
       },
@@ -299,10 +416,4 @@ export async function getChangedProducts() {
   db.$disconnect();
 
   return products;
-}
-
-function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
 }
