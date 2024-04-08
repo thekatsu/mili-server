@@ -1,10 +1,11 @@
 import { db } from '@/app/api/db';
+import { NextRequest } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-export async function GET(
-  request: Request,
-  { params }: { params: { type: string } },
-) {
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const filter = searchParams.get('filter') || '';
+
   const products = await db.product.findMany({
     select: {
       id: true,
@@ -20,21 +21,64 @@ export async function GET(
             },
           },
         },
+        orderBy: [
+          {
+            tag: {
+              name: 'asc',
+            },
+          },
+        ],
       },
     },
-    take: 100,
+    // take: 15,
     where: {
-      category: {
-        not: null,
-      },
-      AND: {
-        category: {
-          not: {
-            equals: '',
+      OR: [
+        {
+          name: {
+            mode: 'insensitive',
+            contains: filter,
           },
         },
-      },
+        {
+          category: {
+            mode: 'insensitive',
+            contains: filter,
+          },
+        },
+        {
+          ProductTag: {
+            some: {
+              tag: {
+                name: {
+                  mode: 'insensitive',
+                  contains: filter,
+                },
+              },
+            },
+          },
+        },
+      ],
+      AND: [
+        {
+          category: {
+            not: { equals: '' },
+          },
+        },
+        {
+          category: {
+            not: null,
+          },
+        },
+      ],
     },
+    orderBy: [
+      {
+        category: 'asc',
+      },
+      {
+        name: 'asc',
+      },
+    ],
   });
 
   type ResponseType = {

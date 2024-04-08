@@ -122,6 +122,7 @@ model Product {
   importedDetails       Boolean?
   datailsImportedAt     DateTime?
   ProductTag            ProductTags[]
+  OrderItems            OrderItems[]
 }
 
 model TagGroup {
@@ -145,6 +146,24 @@ model ProductTags {
   tagId     String
 
   @@id([productId, tagId])
+}
+
+model Order {
+  id          String       @id @default(uuid())
+  description String
+  total       Decimal
+  OrderItems  OrderItems[]
+}
+
+model OrderItems {
+  id        String  @id @default(uuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  amount    Decimal
+  price     Decimal
+  total     Decimal
 }
 
 model Partner {
