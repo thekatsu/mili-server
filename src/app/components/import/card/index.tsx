@@ -38,7 +38,7 @@ export function Card({
   const { data, error, isLoading } = useSWR<ProgressType>(
     endpointProgress,
     fetcher,
-    { refreshInterval: 30 },
+    { refreshInterval: 60000 },
   );
 
   let step = 0;
