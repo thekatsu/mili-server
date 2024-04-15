@@ -1,26 +1,11 @@
 import { db } from '@/app/api/db';
-import { randomUUID } from 'crypto';
+// import { randomUUID } from 'crypto';
 import { NextRequest } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const filter = searchParams.get('filter') || '';
-
-  return Response.json([
-    {
-      id: randomUUID(),
-      title: 'grupo1',
-    },
-    {
-      id: randomUUID(),
-      title: 'grupo2',
-    },
-    {
-      id: randomUUID(),
-      title: 'grupo3',
-    },
-  ]);
 
   const products = await db.product.findMany({
     select: {
@@ -150,12 +135,5 @@ export async function GET(request: NextRequest) {
       return acc;
     }, [] as ResponseType[]);
 
-  // const productByGroup = products.reduce((acc, curr, index, prod) => {
-  //   const groupName = curr.category?.split(' >> ')[0];
-  //   console.log(curr);
-
-  //   return { acc, ...curr };
-  // }, [] as ResponseType[]);
-
-  // return Response.json(productByGroup);
+  return Response.json(productByGroup);
 }
