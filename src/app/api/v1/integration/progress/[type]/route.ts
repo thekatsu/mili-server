@@ -5,10 +5,16 @@ export async function GET(
   request: Request,
   { params }: { params: { type: string } },
 ) {
+  const event: { [key: string]: string } = {
+    tags: 'integration/tags.import',
+    'tag-groups': 'integration/tag-groups.import',
+    products: 'integration/products.import',
+  };
+
   return Response.json(
     await db.integrationProgress.findFirst({
       where: {
-        key: params.type,
+        key: event[params.type],
       },
       orderBy: [
         {

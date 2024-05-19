@@ -1,12 +1,12 @@
 import { serve } from 'inngest/next';
 import { inngest } from '@/app/api/inngest/client';
 import {
-  importProducts,
-  importTagGroups,
-  importTags,
-} from '@/app/api/inngest/functions';
+  partnersSearchedFn,
+  productSearchedFn,
+  productsSearchedFn,
+} from '@/app/api/inngest/tiny/functions';
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [importProducts, importTagGroups, importTags],
+  functions: [partnersSearchedFn, productsSearchedFn, productSearchedFn],
 });

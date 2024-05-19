@@ -14,185 +14,100 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-enum IntegrationType {
-  REST
-  SOAP
-}
-
-model ConfigIntegration {
-  id                         String                      @id @default(uuid()) @db.Uuid
-  name                       String                      @db.VarChar(100) // Tiny API2
-  description                String                      @db.VarChar(500) // Tiny API2
-  baseUrl                    String                      @db.VarChar(255) // https://api.tiny.com.br/api2
-  token                      String                      @db.VarChar(512)
-  params                     Json                        @default(dbgenerated("'{}'")) // {token: config.token, formato: 'json'} -> &token=''&formato=json
-  type                       IntegrationType // REST | SOAP 
-  requestPerMinute           Int                         @db.Integer
-  active                     Boolean                     @db.Boolean
-  //Relations
-  configIntegrationEndPoints ConfigIntegrationEndpoint[]
-}
-
-model ConfigIntegrationEndpoint {
-  id                       String                    @id @default(uuid()) @db.Uuid
-  name                     String // Obter Produtos
-  endpoint                 String // produtos.pesquisa.php
-  method                   String // GET | POST | DELETE | UPDATE | PATCH
-  paginated                Boolean
-  parent                   Int // Se é filha de outra requisição e deve ser acionada após resposta da requisição pai (se endpoint da filha for o mesmo da pai não será feita chamada ao endpoint novamente)
-  bodyFilter               String // res.retorno.produtos
-  urlParams                String // {pagina: res.retorno.pagina+1 || 1, pesquisa: '', situacao: 'A', id: parent.body.id} => &pesquisa=${pesquisa}&situacao=A&pagina=${pagina}
-  //Relations
-  configIntegration        ConfigIntegration         @relation(fields: [configIntegrationId], references: [id])
-  configIntegrationId      String                    @db.Uuid
-  configIntegrationMappers ConfigIntegrationMapper[]
-  configIntegrationAuth    ConfigIntegrationAuth[]
-}
-
-enum IntegrationAuthType {
-  TOKEN
-  OAUTH2
-}
-
-model ConfigIntegrationAuth {
-  id                          String                     @id @default(uuid()) @db.Uuid
-  type                        IntegrationAuthType // TOKEN | OAuth2 | etc
-  ConfigIntegrationEndpoint   ConfigIntegrationEndpoint? @relation(fields: [configIntegrationEndpointId], references: [id])
-  configIntegrationEndpointId String?                    @db.Uuid
-}
-
-model ConfigIntegrationMapper {
-  id                          String                    @id @default(uuid()) @db.Uuid
-  entity                      String //Product
-  from                        String //produto.id 
-  to                          String //id
-  //Relations
-  configIntegrationEndpoint   ConfigIntegrationEndpoint @relation(fields: [configIntegrationEndpointId], references: [id])
-  configIntegrationEndpointId String                    @db.Uuid
-}
-
 model Product {
-  id                    String        @id @default(uuid()) @db.VarChar(50)
-  name                  String
-  code                  String
-  price                 Decimal
-  promocionalPrice      Decimal
-  costPrice             Decimal
-  averageCostPrice      Decimal
-  unit                  String
-  gtin                  String
-  variationType         String
-  location              String
-  creationDate          DateTime?
-  situation             String
-  ncm                   String?
-  origin                String?
-  gtinPackaging         String?
-  netWeight             Decimal?
-  grossWeight           Decimal?
-  minimumStock          Decimal?
-  maximumStock          Decimal?
-  //idVendor
-  //productCodeVendor
-  unitsPerBox           String?
-  type                  String?
-  IPIClass              String?
-  fixedIPIValue         Decimal?
-  codeListService       String?
-  additionalDescription String?
-  note                  String?
-  guarantee             String?
-  cest                  String?
-  idParent              Int?
-  toOrder               String?
-  brand                 String?
-  packagingType         Int?
-  packagingHeight       Decimal?
-  packagingWidth        Decimal?
-  packagingLength       Decimal?
-  packagingDiameter     Decimal?
-  category              String?
-  class                 String?
-  seoTitle              String?
-  seoDescription        String?
-  seoKeywords           String?
-  linkVideo             String?
-  slug                  String?
-  image                 String?
-  importedDetails       Boolean?
-  datailsImportedAt     DateTime?
-  ProductTag            ProductTags[]
-  OrderItems            OrderItems[]
+  id            String        @id @default(uuid()) @db.VarChar(50)
+  name          String
+  code          String
+  price         Decimal
+  unit          String
+  variationType String
+  active        String
+  type          String?
+  idParent      String?
+  brand         String?
+  category      String?
+  class         String?
+  slug          String?
+  image         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
+  ProductTag    ProductTags[]
+  OrderItems    OrderItems[]
 }
 
 model TagGroup {
-  id   String @id @default(uuid())
-  name String
-  Tag  Tag[]
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Tag       Tag[]
 }
 
 model Tag {
   id         String        @id @default(uuid())
   name       String
-  tagGroup   TagGroup      @relation(fields: [tagGroupId], references: [id])
   tagGroupId String
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime?     @updatedAt
+  tagGroup   TagGroup      @relation(fields: [tagGroupId], references: [id])
   ProductTag ProductTags[]
 }
 
 model ProductTags {
-  product   Product @relation(fields: [productId], references: [id])
   productId String
-  tag       Tag     @relation(fields: [tagId], references: [id])
   tagId     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  tag       Tag       @relation(fields: [tagId], references: [id])
+  product   Product   @relation(fields: [productId], references: [id])
 
-  @@id([productId, tagId])
+  @@id(name: "productTagId", [productId, tagId])
 }
 
 model Order {
   id          String       @id @default(uuid())
   description String
   total       Decimal
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @updatedAt
   OrderItems  OrderItems[]
 }
 
 model OrderItems {
-  id        String  @id @default(uuid())
-  order     Order   @relation(fields: [orderId], references: [id])
+  id        String    @id @default(uuid())
   orderId   String
-  product   Product @relation(fields: [productId], references: [id])
   productId String
   amount    Decimal
   price     Decimal
   total     Decimal
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  order     Order     @relation(fields: [orderId], references: [id])
+  product   Product   @relation(fields: [productId], references: [id])
 }
 
 model Partner {
-  id           String   @id @default(uuid())
-  code         String
-  name         String
-  nickname     String
-  type         String
-  taxID        String
-  street       String
-  complement   String
-  area         String
-  zip          String
-  city         String
-  state        String
-  email        String
-  phone        String
-  idPriceiList Int
-  idSeller     Int
-  sellerName   String
-  active       String
-  creationDate DateTime
+  id         String    @id @default(uuid())
+  code       String?
+  name       String
+  nickname   String
+  type       String?
+  taxID      String?
+  email      String?
+  phone      String?
+  idSeller   Int?
+  sellerName String?
+  active     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 model IntegrationProgress {
-  id         String    @id @default(uuid()) @db.Uuid
-  key        String    @db.VarChar(50)
-  startDate  DateTime  @db.Timestamp()
-  endDate    DateTime? @db.Timestamp()
-  step       Int       @db.Integer
-  totalSteps Int       @db.Integer
+  id        String    @id @default(uuid()) @db.VarChar(50)
+  key       String    @db.VarChar(50)
+  startDate DateTime  @db.Timestamp()
+  endDate   DateTime? @db.Timestamp()
+  progress  Int       @db.Integer
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

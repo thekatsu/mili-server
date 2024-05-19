@@ -23,8 +23,7 @@ type CardProps = {
 type ProgressType = {
   id: string;
   key: string;
-  step: number;
-  totalSteps: number;
+  progress: number;
   startDate: Date;
   endDate: Date | null;
 };
@@ -41,15 +40,7 @@ export function Card({
     { refreshInterval: 60000 },
   );
 
-  let step = 0;
-  let totalSteps = 0;
-  if (data) {
-    step = data.step;
-    totalSteps = data.totalSteps;
-  }
-
-  const progress = (step * 100) / totalSteps;
-  const rest = totalSteps - step;
+  const progress = data?.progress;
 
   return (
     <CardShadcn className="m-4 flex h-fit w-fit flex-1 flex-col">
@@ -61,11 +52,6 @@ export function Card({
         {isLoading && <p>Carregando</p>}
         {error && <p>Falhou: {error}</p>}
         <div className="flex flex-1 flex-col">
-          <p>
-            {step} of {totalSteps}: {(((rest * 2) / 60) % 60).toFixed(0)}
-            min {((rest * 2) % 60).toFixed(0)}s
-          </p>
-
           <Progress value={progress}></Progress>
         </div>
       </CardContent>

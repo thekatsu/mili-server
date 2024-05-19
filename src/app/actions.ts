@@ -1,23 +1,31 @@
 'use server';
 import { inngest } from './api/inngest/client';
 
-export async function startProductImport() {
-  console.log('clicou!!');
-  const innStatus = await inngest.send({ name: 'test/products.import' });
-  console.log(innStatus);
-  return null;
-}
+// export async function searchProducts(query: string) {
+//   return await inngest.send({
+//     name: 'tiny/products.searched',
+//     data: {
+//       query,
+//     },
+//   });
+// }
 
-export async function startTagGroupImport() {
-  console.log('clicou!!');
-  const innStatus = await inngest.send({ name: 'test/tag-groups.import' });
-  console.log(innStatus);
-  return null;
-}
+// export async function startProductImport() {
+//   const innStatus = await inngest.send({ name: 'integration/products.import' });
+//   console.log(innStatus);
+//   return null;
+// }
 
-export async function startTagImport() {
-  console.log('clicou!!');
-  const innStatus = await inngest.send({ name: 'test/tags.import' });
-  console.log(innStatus);
-  return null;
-}
+// export async function startTagGroupImport() {
+//   const innStatus = await inngest.send({
+//     name: 'integration/tag-groups.import',
+//   });
+//   console.log(innStatus);
+//   return null;
+// }
+
+// export async function startTagImport() {
+//   const innStatus = await inngest.send({ name: 'integration/tags.import' });
+//   console.log('inns', innStatus);
+//   return null;
+// }
